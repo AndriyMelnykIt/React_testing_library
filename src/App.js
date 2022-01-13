@@ -4,7 +4,7 @@ import './App.css';
 const Search = ({ value, onChange, children }) => (
 	<div>
 		<label htmlFor="search">{children}</label>
-		<input type="text" id="search" value={value} onChange={onChange} />
+		<input type="text" id="search" placeholder="search text..." value={value} onChange={onChange} />
 	</div>
 );
 
@@ -17,6 +17,7 @@ const App = () => {
 
 	return (
 		<div>
+			<img src="" alt="search image" />
 			<Search value={searсh} onChange={handleChange}>
 				Search:
 			</Search>
