@@ -1,23 +1,20 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-// test('renders learn react link', () => {
-//   const {asFragment} = render(<App />);
-//   expect( asFragment (<App />)).toMatchSnapshot();
-//   const linkElement = screen.getByText(/learn react/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
-
-// Різні типи вибора елемента
+// Варіанти пошуку getBy, queryBy, findBy;
 
 describe("App", () => {
-	it ('render App component', () => {
+	it ('render App component', async () => {
 		render(<App />);
-		screen.debug();        //регулярний вираз - перевіряється часткове співпадіння ( i - означає не чутливе до регістру)
-		expect(screen.getByText(/Search:/i)).toBeInTheDocument();
-		expect(screen.getByRole('textbox')).toBeInTheDocument();
-		expect(screen.getByLabelText(/search/i)).toBeInTheDocument();
-		expect(screen.getByPlaceholderText('search text...')).toBeInTheDocument();
-		expect(screen.getByAltText('search image')).toBeInTheDocument();
+		// expect(screen.queryByText(/Search for React/i)).toBeNull();
+		expect(screen.queryByText(/Logged in as/i)).toBeNull();
+		screen.debug()
+		expect(await screen.findByText(/Logged in as/i)).toBeInTheDocument();
+		screen.debug()
+
+		expect( screen.getByAltText(/search image/i)).toHaveClass('image');
+		expect( screen.getByLabelText(/search/i)).not.toBeRequired();
+		expect( screen.getByLabelText(/search/i)).toBeEmptyDOMElement();
+		expect( screen.getByLabelText(/search/i)).toHaveAttribute("id");
 	});
 });
