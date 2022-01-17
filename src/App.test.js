@@ -1,23 +1,35 @@
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 
-// test('renders learn react link', () => {
-//   const {asFragment} = render(<App />);
-//   expect( asFragment (<App />)).toMatchSnapshot();
-//   const linkElement = screen.getByText(/learn react/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
-
-// Різні типи вибора елемента
-
 describe("App", () => {
-	it ('render App component', () => {
+	test('render App component', async () => {
 		render(<App />);
-		screen.debug();        //регулярний вираз - перевіряється часткове співпадіння ( i - означає не чутливе до регістру)
-		expect(screen.getByText(/Search:/i)).toBeInTheDocument();
-		expect(screen.getByRole('textbox')).toBeInTheDocument();
-		expect(screen.getByLabelText(/search/i)).toBeInTheDocument();
-		expect(screen.getByPlaceholderText('search text...')).toBeInTheDocument();
-		expect(screen.getByAltText('search image')).toBeInTheDocument();
+		await screen.findByText(/Logged in as/i)
+		expect(screen.queryByText(/Searches for React/)).toBeNull();
+		screen.debug();
+		fireEvent.change(screen.getByRole('textbox'), {
+			target: { value: "React" },
+		});
+		expect(screen.queryByText(/Searches for React/)).toBeInTheDocument();
+	})
+});
+
+describe("events", () => {
+	it("checkbox click", () => {
+		const handleChange = jest.fn();
+		const { container } = render(<input type="checkbox" onChange={handleChange} />)
+		const checkbox = container.firstChild;
+		fireEvent.click(checkbox);
+		expect(handleChange).toHaveBeenCalledTimes(1);
+		expect(checkbox).toBeChecked();
 	});
+
+	it("input focus", () => {
+		const { container } = render(<input type="checkbox" data-testid="simple-input" />);
+		const input = getByTestId("simple-input");
+		expect(input).not.toHaveFocus()
+		input.focus();
+		expect(input).toHaveFocus();
+	})
 });
